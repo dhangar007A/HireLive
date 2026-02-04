@@ -12,8 +12,8 @@ const __dirname = path.resolve();
 
 //middlewares
 app.use(express.json());
-//Credentials=true means => server allows a browser to include cookies on requests
-app.use(cors({origin:ENV.CLIENT_URL, Credentials:true}));
+// credentials=true means => server allows a browser to include cookies on requests
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 
 app.use('/inngest', serve({client: inngest, functions}));
 
@@ -26,11 +26,12 @@ app.get("/help", (req, res) => {
 });
 
 
-if(ENV.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+if (ENV.NODE_ENV === 'production') {
+    // Serve the built frontend from repo root /frontend/dist
+    app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
-    app.get("/{*any }", (req, res) => {
-        res.sendFile(path.join(__dirname, '../frontend', 'dist' , 'index.html'));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
     });
 }
 
