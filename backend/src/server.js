@@ -19,7 +19,7 @@ app.use(express.json());
 // credentials=true means => server allows a browser to include cookies on requests
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 
-app.use('/inngest', serve({client: inngest, functions}));
+app.use('/api/inngest', serve({client: inngest, functions}));
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg: "Hello, healthy!"});
