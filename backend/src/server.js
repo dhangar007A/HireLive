@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { ENV } from './lib/env.js';
 import { connectDB } from './lib/db.js';
@@ -8,7 +9,10 @@ import { inngest, functions } from './lib/inngest.js';
 
 
 const app = express();
-const __dirname = path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Go up two levels from backend/src to project root
+const projectRoot = path.resolve(__dirname, '..', '..');
 
 //middlewares
 app.use(express.json());
@@ -28,10 +32,10 @@ app.get("/help", (req, res) => {
 
 if (ENV.NODE_ENV === 'production') {
     // Serve the built frontend from repo root /frontend/dist
-    app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+    app.use(express.static(path.join(projectRoot, 'frontend', 'dist')));
 
     app.get(/.*/, (req, res) => {
-        res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+        res.sendFile(path.join(projectRoot, 'frontend', 'dist', 'index.html'));
     });
 }
 
