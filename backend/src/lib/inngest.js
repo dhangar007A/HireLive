@@ -1,7 +1,7 @@
 import {Inngest} from 'inngest';
 import {connectDB} from './db.js';
 import User from '../models/User.js';
-import { deleteStreamUser } from './stream.js';
+import { deleteStreamUser, upsertStreamUser } from './stream.js';
 
 //create a client to send and receive inngest events
 export const inngest = new Inngest({ id: 'Abhi-HireLive' });
