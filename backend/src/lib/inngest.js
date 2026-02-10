@@ -20,6 +20,8 @@ const syncUser = inngest.createFunction(
         });
 
         await User.create(newUser);
+
+        // do sth ltr
     }
 )
 
@@ -31,6 +33,8 @@ const deleteUserFromDB = inngest.createFunction(
         const {id} = event.data;
 
         await User.deleteOne({clerkId: id});
+
+        // do sth ltr
     }
 )
 
