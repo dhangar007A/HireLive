@@ -28,6 +28,7 @@ const syncUser = inngest.createFunction(
             image: newUser.profileImage,
         });
 
+        // i will add something to send welcome email to user when i will be free
         // do sth ltr
     }
 )

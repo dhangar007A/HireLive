@@ -8,6 +8,7 @@ import { connectDB } from './lib/db.js';
 import {serve} from 'inngest/express';
 import { inngest, functions } from './lib/inngest.js';
 import chatRoutes from './routes/chatRoutes.js';
+import sessionRoutes from './routes/sessionRoutes.js';
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(clerkMiddleware()); // this adds auth field to req object: req.auth
 
 app.use('/api/inngest', serve({client: inngest, functions}));
 app.use('/api/chat', chatRoutes);
+app.use('/api/sessions', sessionRoutes);
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg: "Hello, healthy!"});
