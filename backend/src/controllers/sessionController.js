@@ -82,7 +82,7 @@ export async function getMyRecentSessions(req, res) {
 
 export async function getSessionById(req, res) {
     try{
-        const sessionId = req.params;
+        const { id: sessionId } = req.params;
 
         const session = await Session.findById(sessionId)
         .populate('host', 'name profileImage email clerkId')
@@ -129,6 +129,36 @@ export async function joinSession(req, res) {
         res.status(500).json({msg: "Server error"});        
     }
 }  
+
+export async function leaveSession(req, res) {
+    try{
+        const { id } = req.params;
+        const userId = req.user.id;
+        const clerkId = req.user.clerkId;
+
+        const session = await Session.findById(id);
+
+        if(!session) {
+            return res.status(404).json({msg: "Session not found"});
+        }
+
+        if(!session.participant || session.participant.toString() !== userId) {
+            return res.status(400).json({msg: "You are not the active participant in this session"});
+        }
+
+        session.participant = null;
+        await session.save();
+
+        const channel = chatClient.channel("messaging", session.callId);
+        await channel.removeMembers([clerkId]);
+
+        res.status(200).json({msg: "Left session successfully"});
+    }
+    catch(err){
+        console.error(`Failed to leave session: ${err.message}`);
+        res.status(500).json({msg: "Server error"});
+    }
+}
 
 export async function endSession(req, res) {
     try{
